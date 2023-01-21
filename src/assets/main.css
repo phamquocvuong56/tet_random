@@ -8,6 +8,12 @@ body {
 .custom-cursor-hover {
   cursor:url('./images//cursor_hover.png'), auto;
 }
+.text-yellow-light {
+  color:yellow;
+  text-shadow: 0 0 10px yellow,
+            0 0 20px rgb(223, 223, 0),
+            0 0 30px rgb(179, 179, 0);
+}
 @font-face {
   font-family: "Merienda";
   src: local("Merienda"),

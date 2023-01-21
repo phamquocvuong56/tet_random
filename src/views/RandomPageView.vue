@@ -27,8 +27,8 @@ export default {
             listPath: [
                 image1, image2, image3, image4, image5
             ],
-            dataShowUsers:{
-                num10:0, num20:0, num50:0, numUsers:0, num10Remaining:0,num20Remaining:0,num50Remaining:0
+            dataShowUsers: {
+                num10: 0, num20: 0, num50: 0, numUsers: 0, num10Remaining: 0, num20Remaining: 0, num50Remaining: 0
             }
         }
     },
@@ -37,6 +37,14 @@ export default {
     },
     created() {
         this.showPopup = this.$store.state.RandomData.dataPopup.isShow
+        const num10 = this.$store.state.RandomData.dataRandom.num10
+        const num20 = this.$store.state.RandomData.dataRandom.num20
+        const num50 = this.$store.state.RandomData.dataRandom.num50
+        const num10Remaining = this.$store.state.RandomData.dataRandom.num10
+        const num20Remaining = this.$store.state.RandomData.dataRandom.num20
+        const num50Remaining = this.$store.state.RandomData.dataRandom.num50
+        const numUsers = this.$store.state.RandomData.dataRandom.userNum
+        this.dataShowUsers = { ...this.dataShowUsers, num10, num20, num50, numUsers, num10Remaining, num20Remaining, num50Remaining }
         const lstTemp = this.handleDataRandomFromVueX()
         this.randomList(lstTemp)
     },
@@ -47,7 +55,7 @@ export default {
         handleClose(indexRemove) {
             this.closeFlag = true
             this.indexRemove = indexRemove
-            this.$store.commit('RandomData/setDataPopup', { isShow: false, value: '', id: '', text: '' })
+            this.$store.commit('RandomData/setDataPopup', { isShow: false, value: '', id: '', text: '', path: '' })
         },
         handleDataRandomFromVueX() {
             const data = this.$store.state.RandomData.dataRandom
@@ -96,7 +104,6 @@ export default {
                 this.lstRender.push(listRandom[randomIndex])
                 listRandom.splice(randomIndex, 1)
             }
-            console.log('lst random: ', JSON.parse(JSON.stringify(this.lstRender)))
 
         },
         handleRandom() {
@@ -105,22 +112,34 @@ export default {
                 this.lstRender.splice(this.lstRender.indexOf(idRemove), 1)
                 this.closeFlag = false
             }
-            let lstTemp=[];
+            let lstTemp = [];
             if (this.lstRender.length > 0) {
-                lstTemp=JSON.parse(JSON.stringify(this.lstRender)) 
+                lstTemp = JSON.parse(JSON.stringify(this.lstRender))
+
             } else {
                 lstTemp = this.handleDataRandomFromVueX()
             }
-            this.randomList(lstTemp)
-            const num10Remaining= this.lstRender.filter((item)=>item.value=10000)
-            const num20Remaining= this.lstRender.filter((item)=>item.value=20000)
-            const num50Remaining= this.lstRender.filter((item)=>item.value=50000)
-            console.log('data: ',num10Remaining,num20Remaining, num50Remaining,this.lstRender)
+            this.randomList(JSON.parse(JSON.stringify(lstTemp)))
+            let num10Remaining = 0;
+            let num20Remaining = 0;
+            let num50Remaining = 0;
+            for (let i = 0; i < lstTemp.length; i++) {
+                if (lstTemp[i].value === 10000) {
+                    num10Remaining += 1;
+                }
+                if (lstTemp[i].value === 20000) {
+                    num20Remaining += 1;
+                }
+                if (lstTemp[i].value === 50000) {
+                    num50Remaining += 1;
+                }
+            }
+            this.dataShowUsers = { ...this.dataShowUsers, num10Remaining, num20Remaining, num50Remaining }
         },
         randomImagePath() {
 
         },
-        handleDataShowUsers(){
+        handleDataShowUsers() {
 
         }
     },
@@ -165,10 +184,13 @@ export default {
                 </div>
             </div>
             <div class="show-data">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div class="text-yellow-light">{{ `Players: ${dataShowUsers.numUsers}`}} </div>
+                <div class="text-yellow-light" :bind="dataShowUsers.num50Remaining">{{ `50000: ${dataShowUsers.num50},
+                remaining: ${dataShowUsers.num50Remaining}`}} </div>
+                <div class="text-yellow-light" :bind="dataShowUsers.num20Remaining">{{ `20000: ${dataShowUsers.num20},
+                remaining: ${dataShowUsers.num20Remaining}`}} </div>
+                <div class="text-yellow-light" :bind="dataShowUsers.num10Remaining">{{ `10000: ${dataShowUsers.num10},
+                remaining: ${dataShowUsers.num10Remaining}`}} </div>
             </div>
             <div class="cat">
                 <div class="heart1"><img width="100%" height="100%" src="../assets/images/heart.png" alt="heart 1">
@@ -369,12 +391,14 @@ export default {
 
     .show-data {
         position: absolute;
-        width: 200px;
-        background: #ccc;
-        height: 300px;
-        top: 50%;
-        left: calc(50% - 500px);
-        transform: translate(-50%, -50%)
+        width: fit-content;
+        height: fit-content;
+        top: calc(50% - 44px);
+        left: calc(50% - 590px);
+        transform: translate(-50%, -50%);
+        border: 2px solid yellow;
+        box-shadow: 0 0 10px yellow;
+        padding: 12px;
     }
 
     .tet-items {
