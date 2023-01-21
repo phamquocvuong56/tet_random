@@ -174,6 +174,11 @@ export default {
         <div class="tet-wrap-content custom-cursor">
             <img class="png-bg" src="../assets/images/bg.png" width="100%" height="100%" alt="bg4">
             <div class="title">Click on item to receive gifts</div>
+            <div class="firework">
+                <div class="fire"><img src="../assets/images/firework.gif" width="100%" height="100%" alt="fire"></div>
+                <div class="line"><img src="../assets/images/firework_line.gif" width="100%" height="100%" alt="line">
+                </div>
+            </div>
             <div class="tet-items">
                 <div v-for="item in lstRender" :key="item.id" class="tet-item custom-cursor-hover"
                     @click="setShowPopup(item)">
@@ -387,6 +392,24 @@ export default {
             0 0 20px rgb(223, 223, 0),
             0 0 30px rgb(179, 179, 0),
             0 0 40px rgb(133, 133, 1);
+    }
+
+    .firework {
+        position: absolute;
+        top: 7%;
+        left: 80%;
+        width: 100px;
+        height: 500px;
+        display:flex;
+        flex-direction: column;
+        align-items:center;
+        .line {
+            width:20px;
+            margin-top:50px;
+        }
+        .fire {
+            width:100%;
+        }
     }
 
     .show-data {
