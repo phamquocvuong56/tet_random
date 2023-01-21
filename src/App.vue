@@ -1,17 +1,9 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
 
   <main>
-    App
-    <!-- <Home/> -->
-    <!-- <RandomPage/> -->
-    <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/random-page">Random Page</RouterLink>
-      </nav>
      <RouterView/>
   </main>
 </template>

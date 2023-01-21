@@ -79,23 +79,26 @@ export default {
                     id++
                 }
             }
-            let i = 0;
-            let j = 0;
-            let k = 0;
-            do {
-                lstTemp[i].text = this.listText[j]
-                lstTemp[i].path = this.listPath[k]
-                i++;
-                j++;
-                k++;
-                if (j === this.listText.length) {
-                    j = 0
-                }
-                if (k === this.listPath.length) {
-                    k = 0
-                }
-            } while (i < lstTemp.length)
-            return JSON.parse(JSON.stringify(lstTemp))
+            if(lstTemp.length>0){
+                let i = 0;
+                let j = 0;
+                let k = 0;
+                do {
+                    lstTemp[i].text = this.listText[j]
+                    lstTemp[i].path = this.listPath[k]
+                    i++;
+                    j++;
+                    k++;
+                    if (j === this.listText.length) {
+                        j = 0
+                    }
+                    if (k === this.listPath.length) {
+                        k = 0
+                    }
+                } while (i < lstTemp.length)
+                return JSON.parse(JSON.stringify(lstTemp))
+            }
+            return []
         },
         randomList(listRandom) {
             this.lstRender = []
@@ -136,11 +139,8 @@ export default {
             }
             this.dataShowUsers = { ...this.dataShowUsers, num10Remaining, num20Remaining, num50Remaining }
         },
-        randomImagePath() {
-
-        },
-        handleDataShowUsers() {
-
+        redirectToHome(){
+            this.$router.replace({ path: '/' })
         }
     },
     computed: {
@@ -245,6 +245,7 @@ export default {
             <div class="cloud3-flip">
                 <img src="../assets/images/cloud_flip_horizontal.png" alt="cloud3-flip">
             </div>
+            <div class="button-move-home custom-cursor-hover" @click="redirectToHome">Home</div>
             <div class="button-random">
                 <div class="text">Click here to random!</div>
                 <div class="arrow">
@@ -275,6 +276,21 @@ export default {
     background-color: #980510;
     display: flex;
     justify-content: center;
+
+    .button-move-home {
+        position: absolute;
+        left: 0;
+        margin-top: 20px;
+        margin-left: 20px;
+        color: yellow;
+        font-weight: bold;
+        text-decoration-line: underline;
+        transition:.4s ;
+        &:hover{
+            letter-spacing: 6px;
+            opacity:0.8;
+        }
+    }
 
     .cat {
         position: absolute;
@@ -400,15 +416,17 @@ export default {
         left: 80%;
         width: 100px;
         height: 500px;
-        display:flex;
+        display: flex;
         flex-direction: column;
-        align-items:center;
+        align-items: center;
+
         .line {
-            width:20px;
-            margin-top:50px;
+            width: 20px;
+            margin-top: 50px;
         }
+
         .fire {
-            width:100%;
+            width: 100%;
         }
     }
 
