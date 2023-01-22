@@ -187,6 +187,7 @@ export default {
                     <div class="tet-footer">{{ item.text }}</div>
                     <img class="item-img" :src="item.path" alt="">
                 </div>
+                <div class="no-item custom-cursor-hover" v-if="lstRender.length<=0" @click="redirectToHome">No items chose!, click here to redirect to home!!!</div>
             </div>
             <div class="show-data">
                 <div class="text-yellow-light">{{ `Players: ${dataShowUsers.numUsers}`}} </div>
@@ -291,7 +292,17 @@ export default {
             opacity:0.8;
         }
     }
-
+.no-item {
+    text-underline-position: below;
+    font-size:16px;
+    padding:8px;
+    height:30px;
+    transition:.3s;
+    &:hover {
+        letter-spacing:2px;
+        font-weight: bold;
+    }
+}
     .cat {
         position: absolute;
         width: 50px;

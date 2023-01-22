@@ -163,7 +163,6 @@ export default {
 
     .el-icon {
         transition: 0.8s;
-        cursor: url('../assets/images/cursor_medium.png'), auto;
     }
 
     .tet-popup-close:hover .el-icon {
