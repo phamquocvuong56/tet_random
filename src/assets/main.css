@@ -1,12 +1,12 @@
 @import './base.css';
 body {
-  cursor:url('./images//cursor_medium.png'), auto;
+  cursor:url('./images//cursor_medium.png') 10 10, auto;
 }
 .custom-cursor {
-  cursor:url('./images//cursor_medium.png'), auto;
+  cursor:url('./images//cursor_medium.png') 10 10, auto;
 }
 .custom-cursor-hover {
-  cursor:url('./images//cursor_hover.png'), auto;
+  cursor:url('./images//cursor_hover.png') 20 20, auto;
 }
 .text-yellow-light {
   color:yellow;
@@ -19,13 +19,6 @@ body {
   src: local("Merienda"),
    url(./fonts/Merienda/Marlwich-Regular.ttf) format("truetype");
 }
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
 
 a,
 .green {
@@ -37,18 +30,5 @@ a,
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
   }
 }
