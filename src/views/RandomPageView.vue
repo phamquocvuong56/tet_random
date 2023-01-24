@@ -1,10 +1,12 @@
 <script>
 import { PopupItem } from '../popups/index.js'
+import CustomToast from '../toast/CustomToast.vue'
 import { mapGetters } from 'vuex'
 import { image1, image2, image3, image4, image5 } from '../assets/images/index'
 export default {
     data() {
         return {
+            showToast: false,
             closeFlag: false,
             lstRender: [],
             indexRemove: null,
@@ -33,7 +35,8 @@ export default {
         }
     },
     components: {
-        PopupItem
+        PopupItem,
+        CustomToast,
     },
     created() {
         this.showPopup = this.$store.state.RandomData.dataPopup.isShow
@@ -49,8 +52,15 @@ export default {
         this.randomList(lstTemp)
     },
     methods: {
+        hideToast() {
+            this.showToast = false;
+        },
         setShowPopup(item) {
-            this.$store.commit('RandomData/setDataPopup', { isShow: true, value: item.value, id: item.id, text: item.text, path: item.path })
+            if (!this.closeFlag) {
+                this.$store.commit('RandomData/setDataPopup', { isShow: true, value: item.value, id: item.id, text: item.text, path: item.path })
+            } else {
+                this.showToast = true;
+            }
         },
         handleClose(indexRemove) {
             this.closeFlag = true
@@ -79,7 +89,7 @@ export default {
                     id++
                 }
             }
-            if(lstTemp.length>0){
+            if (lstTemp.length > 0) {
                 let i = 0;
                 let j = 0;
                 let k = 0;
@@ -110,6 +120,7 @@ export default {
 
         },
         handleRandom() {
+            this.showToast = false;
             if (this.closeFlag) {
                 const idRemove = this.lstRender.find(item => item.id === this.indexRemove)
                 this.lstRender.splice(this.lstRender.indexOf(idRemove), 1)
@@ -139,7 +150,7 @@ export default {
             }
             this.dataShowUsers = { ...this.dataShowUsers, num10Remaining, num20Remaining, num50Remaining }
         },
-        redirectToHome(){
+        redirectToHome() {
             this.$router.replace({ path: '/' })
         }
     },
@@ -174,39 +185,81 @@ export default {
         <div class="tet-wrap-content custom-cursor">
             <img class="png-bg" src="../assets/images/bg.png" width="100%" height="100%" alt="bg4">
             <div class="title">Click on item to receive gifts</div>
-            <div class="firework">
-                <div class="fire"><img src="../assets/images/firework.gif" width="100%" height="100%" alt="fire"></div>
-                <div class="line"><img src="../assets/images/firework_line.gif" width="100%" height="100%" alt="line">
+            <div class="tet-items-wrap">
+                <div class="firework">
+                    <div class="fire"><img src="../assets/images/firework.gif" width="100%" height="100%" alt="fire">
+                    </div>
+                    <div class="line"><img src="../assets/images/firework_line.gif" width="100%" height="100%"
+                            alt="line">
+                    </div>
                 </div>
-            </div>
-            <div class="tet-items">
-                <div v-for="item in lstRender" :key="item.id" class="tet-item custom-cursor-hover"
-                    @click="setShowPopup(item)">
-                    <h1 class="tet-header">Item name({{ item.id }})</h1>
-                    <div class="tet-body">{{ closeFlag&& this.indexRemove === item.id ? item.value : '' }}</div>
-                    <div class="tet-footer">{{ item.text }}</div>
-                    <img class="item-img" :src="item.path" alt="">
+                <div class="cat">
+                    <div class="heart1"><img width="100%" height="100%" src="../assets/images/heart.png" alt="heart 1">
+                    </div>
+                    <div class="heart2"><img width="100%" height="100%" src="../assets/images/heart.png" alt="heart 2">
+                    </div>
+                    <img src="../assets/images/cat.png" alt="cat">
                 </div>
-                <div class="no-item custom-cursor-hover" v-if="lstRender.length<=0" @click="redirectToHome">No items chose!, click here to redirect to home!!!</div>
+                <div class="than_tai_1">
+                    <img src="../assets/images/than_tai_1.png" alt="than tai 1">
+                </div>
+                <div class="than_tai_2">
+                    <div class="img-wrap">
+                        <div class="than_tai_2_text">
+                            S C R W FE Team
+                        </div>
+                        <img src="../assets/images/than_tai_2.png" alt="than tai 2">
+                    </div>
+                </div>
+                <div class="tet-items">
+                    <div v-for="item in lstRender" :key="item.id"
+                        :class="['tet-item custom-cursor-hover', closeFlag ? 'is-disable' : '']"
+                        @click="setShowPopup(item)">
+                        <h1 class="tet-header"><img src="../assets/images/cute_cat.png" width="100%" height="100%̀"
+                                alt="cute cat"></h1>
+                        <div class="tet-body">{{ closeFlag&& this.indexRemove === item.id ? item.value : '' }}</div>
+                        <div class="tet-footer">{{ item.text }}</div>
+                        <img v-show="!closeFlag || this.indexRemove !== item.id" class="item-img" :src="item.path"
+                            alt="">
+                    </div>
+                    <div class="no-item custom-cursor-hover" v-if="lstRender.length <= 0" @click="redirectToHome">No
+                        items
+                        chose!, click here to redirect to home!!!</div>
+                </div>
+                <div class="button-random">
+                    <div class="text">Click here to random!</div>
+                    <div class="arrow">
+                        <el-icon>
+                            <ArrowDownBold />
+                        </el-icon>
+                    </div>
+                    <div @click="handleRandom" class="custom-cursor-hover face">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="show-data">
                 <div class="text-yellow-light">{{ `Players: ${dataShowUsers.numUsers}`}} </div>
-                <div class="text-yellow-light" :bind="dataShowUsers.num50Remaining">{{ `50000: ${dataShowUsers.num50},
+                <div class="text-yellow-light" :bind="dataShowUsers.num50Remaining">{{ `50000:
+                ${dataShowUsers.num50},
                 remaining: ${dataShowUsers.num50Remaining}`}} </div>
-                <div class="text-yellow-light" :bind="dataShowUsers.num20Remaining">{{ `20000: ${dataShowUsers.num20},
+                <div class="text-yellow-light" :bind="dataShowUsers.num20Remaining">{{ `20000:
+                ${dataShowUsers.num20},
                 remaining: ${dataShowUsers.num20Remaining}`}} </div>
-                <div class="text-yellow-light" :bind="dataShowUsers.num10Remaining">{{ `10000: ${dataShowUsers.num10},
+                <div class="text-yellow-light" :bind="dataShowUsers.num10Remaining">{{ `10000:
+                ${dataShowUsers.num10},
                 remaining: ${dataShowUsers.num10Remaining}`}} </div>
             </div>
-            <div class="cat">
-                <div class="heart1"><img width="100%" height="100%" src="../assets/images/heart.png" alt="heart 1">
+            <div class="long-den-bg">
+                <div class="cloud-bg">
+                    <img src="../assets/images/cloud_bg.png" width="100%" height="100%" alt="long den">
                 </div>
-                <div class="heart2"><img width="100%" height="100%" src="../assets/images/heart.png" alt="heart 2">
+                <div class="long_den">
+                    <img src="../assets/images/den_long.png" alt="long den">
                 </div>
-                <img src="../assets/images/cat.png" alt="cat">
-            </div>
-            <div class="long_den">
-                <img src="../assets/images/den_long.png" alt="long den">
             </div>
             <div class="circle-rotate">
                 <img src="../assets/images/circle_rotate.png" alt="circle rotate">
@@ -216,17 +269,6 @@ export default {
             </div>
             <div class="year">
                 <img src="../assets/images/year.png" alt="year">
-            </div>
-            <div class="than_tai_1">
-                <img src="../assets/images/than_tai_1.png" alt="than tai 1">
-            </div>
-            <div class="than_tai_2">
-                <div class="img-wrap">
-                    <div class="than_tai_2_text">
-                        S C R W FE Team
-                    </div>
-                    <img src="../assets/images/than_tai_2.png" alt="than tai 2">
-                </div>
             </div>
             <div class="cloud1">
                 <img src="../assets/images/cloud.png" alt="cloud1">
@@ -246,69 +288,106 @@ export default {
             <div class="cloud3-flip">
                 <img src="../assets/images/cloud_flip_horizontal.png" alt="cloud3-flip">
             </div>
-            <div class="button-move-home custom-cursor-hover" @click="redirectToHome">Home</div>
-            <div class="button-random">
-                <div class="text">Click here to random!</div>
-                <div class="arrow">
-                    <el-icon>
-                        <ArrowDownBold />
-                    </el-icon>
-                </div>
-                <div @click="handleRandom" class="custom-cursor-hover face">
-                    <div class="eyes">
-                        <div class="eye"></div>
-                        <div class="eye"></div>
-                    </div>
-                </div>
+            <div class="border1">
+                <img width="100%" height="100%̀" src="../assets/images/border1.png" alt="border1">
             </div>
+            <div class="border2">
+                <img width="100%" height="100%̀" src="../assets/images/border2.png" alt="border2">
+            </div>
+            <div class="border3">
+                <img width="100%" height="100%̀" src="../assets/images/border3.png" alt="border3">
+            </div>
+            <div class="border4">
+                <img width="100%" height="100%̀" src="../assets/images/border4.png" alt="border4">
+            </div>
+            <div class="button-move-home custom-cursor-hover" @click="redirectToHome">Home</div>
         </div>
         <popup-item v-if="dataPopup.isShow" :handleClose="handleClose" :dataPopup="dataPopup">
         </popup-item>
+        <custom-toast v-if="showToast" :type="warning" :hideToast="hideToast" />
     </main>
 </template>
 <style lang="scss" scoped>
+main {
+    overflow: hidden;
+}
+
 .tet-wrap-content {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    width: 100%;
+    min-height: 100vh;
     color: #fff;
     background-color: #980510;
-    display: flex;
-    justify-content: center;
+    overflow: hidden;
+
+
+    .border1 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        left: 0;
+        bottom: 0;
+    }
+
+    .border2 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        right: 0;
+        top: 0;
+    }
+
+    .border3 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        bottom: 0;
+        right: 0;
+    }
+
+    .border4 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        top: 0;
+        left: 0;
+    }
 
     .button-move-home {
         position: absolute;
         left: 0;
+        top: 0;
         margin-top: 20px;
         margin-left: 20px;
         color: yellow;
         font-weight: bold;
         text-decoration-line: underline;
-        transition:.4s ;
-        &:hover{
+        transition: .4s;
+
+        &:hover {
             letter-spacing: 6px;
-            opacity:0.8;
+            opacity: 0.8;
         }
     }
-.no-item {
-    text-underline-position: below;
-    font-size:16px;
-    padding:8px;
-    height:30px;
-    transition:.3s;
-    &:hover {
-        letter-spacing:2px;
-        font-weight: bold;
+
+    .no-item {
+        text-underline-position: below;
+        font-size: 16px;
+        padding: 8px;
+        height: 30px;
+        transition: .3s;
+
+        &:hover {
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
     }
-}
+
     .cat {
         position: absolute;
         width: 50px;
-        top: 1%;
+        top: -50px;
         height: 50px;
-        left: calc(50% + 360px);
+        left: 75%;
         z-index: 7;
 
         .heart1 {
@@ -405,13 +484,13 @@ export default {
     }
 
     .title {
-        position: absolute;
-        top: 4%;
-        left: 50%;
-        width: 500px;
+        // position: absolute;
+        top: 20px;
+        // left: 50%;
+        width: 100%;
         height: 50px;
         color: yellow;
-        transform: translate(-50%, -4%);
+        // transform: translate(-50%, -4%);
         text-align: center;
         font-family: "Merienda", Helvetica, Arial;
         font-size: 20px;
@@ -423,9 +502,9 @@ export default {
 
     .firework {
         position: absolute;
-        top: 7%;
-        left: 80%;
-        width: 100px;
+        top: 35%;
+        left: 0%;
+        width: 150px;
         height: 500px;
         display: flex;
         flex-direction: column;
@@ -433,7 +512,7 @@ export default {
 
         .line {
             width: 20px;
-            margin-top: 50px;
+            margin-top: 100px;
         }
 
         .fire {
@@ -445,20 +524,27 @@ export default {
         position: absolute;
         width: fit-content;
         height: fit-content;
-        top: calc(50% - 44px);
-        left: calc(50% - 590px);
-        transform: translate(-50%, -50%);
+        top: 0%;
+        left: 0%;
+        margin-left: 20px;
+        margin-top: 64px;
         border: 2px solid yellow;
         box-shadow: 0 0 10px yellow;
         padding: 12px;
+    }
+
+    .tet-items-wrap {
+        margin-top: 8px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 
     .tet-items {
         display: flex;
         flex-wrap: wrap;
         width: 60%;
-        height: 70%;
-        margin-top: 4%;
+        height: calc(100vh - 200px);
         background-color: orange;
         justify-content: space-around;
         text-align: center;
@@ -483,11 +569,36 @@ export default {
             padding: 12px 24px;
             background-color: red;
             margin: 24px 0;
-            height: 300px;
+            height: 60%;
+            min-height: 320px;
             overflow: hidden;
             position: relative;
             box-shadow: 1px 1px 6px #000;
             transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .tet-header {
+                width: 50px;
+                height: 40px;
+
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+
+            .tet-body {
+                font-size: 20px;
+                font-weight: bold;
+                letter-spacing: 3px;
+            }
+
+            .tet-footer {
+                margin-top: 10%;
+                text-align: justify
+            }
 
             &:hover {
                 scale: 1.1;
@@ -509,8 +620,8 @@ export default {
         position: absolute;
         width: 100px;
         height: 100px;
-        top: 64%;
-        left: calc(50% + 600px);
+        top: 50%;
+        left: 94%;
         transform: translate(-50%, -50%);
 
         button {
@@ -539,10 +650,20 @@ export default {
         }
     }
 
+    .long-den-bg {
+        position: absolute;
+        top: 0;
+        left: 18%;
+
+        .cloud-bg {
+            width: 100px;
+            z-index: 7;
+        }
+    }
+
     .long_den {
         position: absolute;
-        top: -26%;
-        left: 18%;
+        top: -117%;
         transform: translate(-50%, -50%);
         z-index: 6;
         width: 50px;
@@ -629,11 +750,12 @@ export default {
 
     .than_tai_1 {
         position: absolute;
-        top: 63%;
-        left: calc(50% - 450px);
+        top: 80%;
+        left: 16%;
         transform: translate(-50%, -50%);
         width: 180px;
         height: 180px;
+        z-index: 8;
 
         img {
             width: 100%;
@@ -644,14 +766,15 @@ export default {
 
     .than_tai_2 {
         position: absolute;
-        top: 50%;
-        left: calc(50% + 180px);
+        top: 64%;
+        left: 68%;
         transform: translate(-50%, -50%);
         width: 360px;
-        animation: Than_tai_2 linear 4s infinite;
+        animation: Than_tai_2-46af18a3 linear 4s infinite;
         height: 180px;
         display: flex;
         justify-content: flex-end;
+        z-index: 8;
 
         .img-wrap {
             width: 50%;
@@ -968,6 +1091,12 @@ export default {
 
     to {
         rotate: -360deg;
+    }
+}
+
+@media (max-width:1500px) {
+    .tet-item {
+        width: 30% !important;
     }
 }
 </style>
