@@ -774,11 +774,10 @@ main {
             animation: Than_tai_1 linear 4s infinite
         }
     }
-
     .than_tai_2 {
         position: absolute;
-        top: 64%;
-        left: 68%;
+        top: 80%;
+        // left: 68%;
         transform: translate(-50%, -50%);
         width: 360px;
         animation: Than_tai_2-46af18a3 linear 4s infinite;
