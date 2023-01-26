@@ -777,7 +777,7 @@ main {
     .than_tai_2 {
         position: absolute;
         top: 80%;
-        // left: 68%;
+        left: 78%;
         transform: translate(-50%, -50%);
         width: 360px;
         animation: Than_tai_2-46af18a3 linear 4s infinite;
