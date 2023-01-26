@@ -3,9 +3,16 @@ import { PopupItem } from '../popups/index.js'
 import CustomToast from '../toast/CustomToast.vue'
 import { mapGetters } from 'vuex'
 import { image1, image2, image3, image4, image5 } from '../assets/images/index'
+import { firework } from '../musics/index'
 export default {
     data() {
         return {
+            song: {
+                name: "HoangDontSay",
+                singer: "Raftaar x Fortnite",
+                path: firework,
+                image: "https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg",
+            },
             showToast: false,
             closeFlag: false,
             lstRender: [],
@@ -54,6 +61,9 @@ export default {
     methods: {
         hideToast() {
             this.showToast = false;
+        },
+        setSong(url, isPlay){
+            this.$store.commit('songs/setSong', {url: url, isPlay: isPlay})
         },
         setShowPopup(item) {
             if (!this.closeFlag) {
@@ -175,6 +185,7 @@ export default {
                     })
                 }
             })
+            this.$store.commit('songs/setSong', { url: firework, isPlay: false })
         })
     }
 }
@@ -812,7 +823,7 @@ main {
         img {
             width: 100%;
             height: 100%;
-            animation: Cloud1_flip_horizontal linear 4s infinite
+            animation: Cloud1_flip_horizontal ease-in-out 9s infinite
         }
     }
 
@@ -827,7 +838,7 @@ main {
         img {
             width: 100%;
             height: 100%;
-            animation: Cloud2_flip_horizontal linear 5s infinite
+            animation: Cloud2_flip_horizontal ease-in-out 7s infinite
         }
     }
 
@@ -842,7 +853,7 @@ main {
         img {
             width: 100%;
             height: 100%;
-            animation: Cloud3_flip_horizontal linear 6s infinite
+            animation: Cloud3_flip_horizontal ease-in-out 6s infinite
         }
     }
 
@@ -857,7 +868,7 @@ main {
         img {
             width: 100%;
             height: 100%;
-            animation: Cloud1 linear 4s infinite
+            animation: Cloud1 ease-in-out 5s infinite
         }
     }
 
@@ -872,7 +883,7 @@ main {
         img {
             width: 100%;
             height: 100%;
-            animation: Cloud2 linear 5s infinite
+            animation: Cloud2 ease-in-out 7s infinite
         }
     }
 
@@ -887,7 +898,7 @@ main {
         img {
             width: 100%;
             height: 100%;
-            animation: Cloud3 linear 6s infinite
+            animation: Cloud3 ease-in-out 6s infinite
         }
     }
 
