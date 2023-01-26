@@ -1,7 +1,9 @@
 <script>
+import homeMusic from '../musics/homeMusic.mp3'
 export default {
     data() {
         return {
+            song: homeMusic,
             dataRandom: {
                 num50: 1,
                 num20: 2,
@@ -9,9 +11,6 @@ export default {
                 userNum: 6
             }
         }
-    },
-    components: {
-        //
     },
     methods: {
         handleSubmit() {
@@ -24,6 +23,11 @@ export default {
         checkValidate(data) {
             return true
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.$store.commit('songs/setSong', { url: homeMusic, isPlay: false })
+        })
     }
 }
 </script>
@@ -162,10 +166,12 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 10px #fff, 0 0 20px rgb(151, 151, 151), 0 0 30px rgb(97, 97, 97);
-input {
-    outline:none;
-    border: 1px solid #04291e;
-}
+
+    input {
+        outline: none;
+        border: 1px solid #04291e;
+    }
+
     .submit {
         width: 100%;
         height: 26px;
@@ -174,7 +180,7 @@ input {
         font-weight: bold;
         transition: .4s;
         text-transform: uppercase;
-        outline:none;
+        outline: none;
         background-color: unset;
 
         &:hover {
